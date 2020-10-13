@@ -3,7 +3,7 @@
 
 ## Installation
 ```bash
-npm i react-hooks
+npm i @auzmartist/react-hooks
 ```
 
 ## Usage

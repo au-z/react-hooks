@@ -1,6 +1,6 @@
 {
   "name": "@auzmartist/react-hooks",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Helpful hooks to satisfy common reactive patterns",
   "main": "index.js",
   "scripts": {
@@ -45,6 +45,7 @@
     },
     "verbose": true
   },
+  "repository": "github:auzmartist/react-hooks",
   "dependencies": {
     "@types/react": "^16.9.51",
     "babel-loader": "^8.1.0"
