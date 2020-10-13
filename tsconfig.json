@@ -1,0 +1,24 @@
+{
+	"compilerOptions": {
+		"target": "esnext",
+		"module": "esnext",
+		"moduleResolution": "node",
+		"allowJs": false,
+		"declaration": true,
+		"baseUrl": ".",
+		"esModuleInterop": true,
+		"noImplicitAny": true,
+		"preserveConstEnums": true,
+		"sourceMap": true,
+		"types": ["node", "jest"],
+		"paths": {
+			"src/*": ["src/*"],
+			"test/*": ["test/*"],
+		}
+	},
+	"include": [
+		"node_modules",
+		"src/**/*.ts",
+		"test/**/*.ts", "test/useComputed.spec.ts",
+	],
+}
