@@ -1,3 +1,4 @@
+import { act } from "react-test-renderer"
 
 export const sleep = (ms: number = 50) => new Promise((res) => setTimeout(() => res(), ms))
 

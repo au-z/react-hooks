@@ -1,41 +1,45 @@
-import {useEffect, DependencyList, useRef, MutableRefObject} from 'react'
+import {useEffect, DependencyList, useState, Dispatch} from 'react'
 
-type ComputeFn<T> = (...deps: any[]) => T
+type ComputeFn<T> = (val: T, ...deps: any[]) => T
+type AsyncComputeFn<T> = (val: T, ...deps: any[]) => Promise<T>
+
+// adds unmounted flag to EffectCallback
+type AsyncEffectCallback = (unmounted: boolean) => Promise<(void | (() => void | undefined))>
 
 /**
- * Creates a computed ref which will recompute when dependencies change.
- * Dependencies are passed to the fn parameter in the order that they are
+ * Creates a computed ref which will recompute when dependencies change. Dependencies are passed
+ * to the fn parameter in the order that they are
  * passed to the deps parameter.
  * @param fn the compute function
  * @param deps useEffect style dependencies to trigger recompute
  */
-function useComputed<T>(fn: ComputeFn<T>, deps?: DependencyList): MutableRefObject<T> {
-	const ref = useRef<T>()
+function useComputed<T>(fn: ComputeFn<T>, deps?: DependencyList): [T, Dispatch<T>] {
+	const [val, set] = useState<T>(null)
 	useEffect(() => {
-		ref.current = fn(...deps)
+		set((current) => fn(current, ...deps))
 	}, deps)
 
-	return ref
+	return [val, set]
 }
 
 /**
- * Creates a computed ref which will execute the asynchronous computation
- * upon any dependency changes. Dependencies are passed to the fn parameter
- * in the order that they are passed to the deps parameter.
+ * Creates a computed ref which will execute the asynchronous computation upon any dependency changes.
+ * Dependencies are passed to the fn parameter in the order that they are passed to the deps parameter.
  * @param fn the asynchronous compute function
  * @param deps useEffect style dependencies to trigger recompute
  * @param initial the initial value of the returned ref
  */
-function useComputedAsync<T>(fn: ComputeFn<Promise<T>>, deps?: DependencyList, initial?: T): MutableRefObject<T> {
-	const ref = useRef<T>(initial)
+function useComputedAsync<T>(fn: AsyncComputeFn<T>, deps?: DependencyList, initial?: T): [T, Dispatch<T>] {
+	let unmounted = false
+	const [val, set] = useState<T>(initial)
 	useEffect(() => {
-		const recompute = async () => {
-			ref.current = await fn(...deps)
-		}
-		recompute()
+		(async () => {
+			fn(val, ...deps).then((computed: any) => !unmounted && set(computed))
+		})()
+		return () => {unmounted = true}
 	}, deps)
 
-	return ref
+	return [val, set]
 }
 
 /**
@@ -43,9 +47,11 @@ function useComputedAsync<T>(fn: ComputeFn<Promise<T>>, deps?: DependencyList, i
  * @param fn the asynchronous compute function
  * @param deps useEffect style dependencies to trigger recompute
  */
-function useEffectAsync<T>(fn: ComputeFn<Promise<T>>, deps?: DependencyList) {
+function useEffectAsync(fn: AsyncEffectCallback, deps?: DependencyList) {
+	let unmounted = false
 	return useEffect(() => {
-		(() => fn(...deps))()
+		(() => fn(unmounted))()
+		return () => {unmounted = true}
 	}, deps)
 }
 

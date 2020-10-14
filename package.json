@@ -1,12 +1,14 @@
 {
   "name": "@auzmartist/react-hooks",
-  "version": "0.1.2",
+  "version": "0.2.1",
   "description": "Helpful hooks to satisfy common reactive patterns",
   "main": "index.js",
+  "types": "dist/react-hooks.d.ts",
   "scripts": {
     "build": "webpack --env.prod --config ./build/webpack.config.js --progress",
+    "build:dts": "npm-dts --entry src/index.ts --output dist/react-hooks.d.ts generate",
     "dev": "webpack --env.dev -w --config ./build/webpack.config.js --progress",
-    "prepublishOnly": "npm run build",
+    "prepublishOnly": "npm run build && npm run build:dts",
     "test": "jest",
     "test:watch": "jest --watch"
   },
@@ -26,6 +28,7 @@
     "babel-jest": "^26.5.2",
     "core-js": "^3.6.5",
     "jest": "^26.4.2",
+    "npm-dts": "^1.3.4",
     "react": "^16.13.1",
     "react-test-renderer": "^16.13.1",
     "typescript": "^4.0.3",
@@ -39,7 +42,7 @@
     "moduleNameMapper": {
       "src/(.*)": "<rootDir>/src/$1"
     },
-    "testRegex": "(/test/.*|(\\.|/)(test|spec))\\.[jt]sx?$",
+    "testRegex": "(/test/.*|(\\.|/)(test|spec))\\.spec\\.[jt]sx?$",
     "transform": {
       "^.+\\.[t|j]sx?$": "babel-jest"
     },

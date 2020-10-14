@@ -22,7 +22,7 @@ function MyReactComponent({a, b}) {
 
   // BECOMES
 
-  const sum = useComputed(() => a + b, [a, b])
+  const [sum, setSum] = useComputed((current) => a + b, [a, b])
 
   return <div>
     {a} + {b} = {sum.current}
@@ -47,19 +47,23 @@ function MyReactComponent({href}) {
 
   // BECOMES
 
-  const response = useComputedAsync((url) => fetch(url), [href])
+  const [response] = useComputedAsync((current, url) => fetch(url), [href])
 }
 ```
 
-Both `useComputed` and `useComputedAsync` take dependencies exactly like a vanilla `useEffect` hook. As a convenience, the dependencies array is passed to the compute function in the order they were passed. So for example:
+Both `useComputed` and `useComputedAsync` take dependencies exactly like a vanilla `useEffect` hook. As a convenience, the dependencies array is passed to the compute function in the order they were passed.
 
 ```js
-const computed = useComputed((localA, localB) => {
+const computed = useComputed((current, localA, localB) => {
   return doSomething(localA, localB)
 }, [A, B])
 ```
 
-In the above example, dependencies `A` and `B` are provided as locally scoped variables `localA` and `localB`. This allows for more freedom in naming variables for the compute function.
+Above, dependencies `A` and `B` are provided as locally scoped variables `localA` and `localB`. This allows for more freedom in naming variables for the compute function.
+
+The current value is also passed as the first argument. In `useComputedAsync`, the current value will be the provided `initial` value until the asynchronous behavior resolves.
+
+`useComputed` and `useComputedAsync` expose their underlying state setter for manual updates outside of the computed scope. Avoid using the setter manually unless necessary. Updates to the computed property outside of the compute function increase the logical surface area of your code.
 
 ### useEffectAsync
 A simple wrapper around the `useEffect` hook for handling asynchronous computation.
@@ -69,6 +73,9 @@ import {useEffectAsync} from '@auzmartist/react-hooks'
 
 function MyReactComponent({href}) {
   const [respose, setResponse] = useState(null)
-  useEffectAsync(async () => setResponse(await fetchData(href)), [href])
+  useEffectAsync(async (unmounted) => !unmounted && setResponse(await fetchData(href)), [href])
 }
 ```
+#### Options
+
+**unmounted**: Indicates whether the component has unmounted, allowing you to prevent memory leaks

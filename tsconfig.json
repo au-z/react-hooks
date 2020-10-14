@@ -4,12 +4,13 @@
 		"module": "esnext",
 		"moduleResolution": "node",
 		"allowJs": false,
+		"outDir": "dist",
+		"sourceMap": true,
 		"declaration": true,
 		"baseUrl": ".",
 		"esModuleInterop": true,
 		"noImplicitAny": true,
 		"preserveConstEnums": true,
-		"sourceMap": true,
 		"types": ["node", "jest"],
 		"paths": {
 			"src/*": ["src/*"],
@@ -17,8 +18,7 @@
 		}
 	},
 	"include": [
-		"node_modules",
 		"src/**/*.ts",
-		"test/**/*.ts", "test/useComputed.spec.ts",
+		"test/**/*.ts",
 	],
 }
