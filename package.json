@@ -1,6 +1,6 @@
 {
   "name": "@auzmartist/react-hooks",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "description": "Helpful hooks to satisfy common reactive patterns",
   "main": "index.js",
   "types": "dist/react-hooks.d.ts",
