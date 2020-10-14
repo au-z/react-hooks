@@ -1,6 +1,6 @@
 {
   "name": "@auzmartist/react-hooks",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "Helpful hooks to satisfy common reactive patterns",
   "main": "index.js",
   "types": "dist/react-hooks.d.ts",
@@ -25,6 +25,7 @@
     "@babel/preset-typescript": "^7.10.4",
     "@testing-library/react-hooks": "^3.4.2",
     "@types/jest": "^26.0.14",
+    "@types/react": "^16.9.52",
     "babel-jest": "^26.5.2",
     "core-js": "^3.6.5",
     "jest": "^26.4.2",
@@ -50,7 +51,6 @@
   },
   "repository": "github:auzmartist/react-hooks",
   "dependencies": {
-    "@types/react": "^16.9.51",
     "babel-loader": "^8.1.0"
   }
 }
